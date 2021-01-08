@@ -24,15 +24,6 @@ def parse_and_sort_input(li):
         guard_added_list.append((dt, current_guard, message))
     return(guard_added_list)
 
-def print_shift(shift):
-    (date, guard, pattern) = shift
-    row1 = '0' * 10 + '1' * 10 + '2' * 10 + '3' * 10 + '4' * 10 + '5' * 10
-    row2 = '0123456789' * 6
-    print('Date:',date,'Guard:',guard)
-    print(row1)
-    print(row2)
-    print(pattern,'\n')
-
 def create_shifts(li):
     shift_starts = []
     shift_ends = []
