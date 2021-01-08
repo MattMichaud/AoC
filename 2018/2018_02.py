@@ -1,19 +1,9 @@
 def parse_input(filename):
-    """Function to parse puzzle input for day 1, returns a list of frequency changes
-
-    Args:
-        filename (str): name of file to be parsed
-    """
     with open(filename, 'r') as f:
         data = f.read().splitlines()
     return(data)
 
 def part1(li):
-    """Function to complete part 1 - returns checksum
-
-    Args:
-        li (list): list of strings of box IDs
-    """
     from collections import Counter
     exactly_two_count = 0
     exactly_three_count = 0
@@ -25,12 +15,6 @@ def part1(li):
     return(exactly_two_count * exactly_three_count)
 
 def nearly_equal(string1, string2):
-    """compares two strings, returns common characters if they have exactly one character different, else returns False
-
-    Args:
-        string1 (str): first string
-        string2 (str): second string
-    """
     if len(string1) != len(string2):
         return False
     else:
@@ -46,11 +30,6 @@ def nearly_equal(string1, string2):
     return(False)
 
 def part2(li):
-    """Function to complete part 2 - returns common characters between similar box IDs
-
-    Args:
-        li (list): list of strings of box IDs
-    """
     for index, boxID in enumerate(li):
         remaining_IDs = li[index+1:]
         for compareID in remaining_IDs:
