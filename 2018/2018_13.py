@@ -107,7 +107,7 @@ def part1(filename):
 def part2(filename):
     my_track = Track(filename)
     while len(my_track.active_carts()) > 1:
-s        my_track.complete_tick(False)
+        my_track.complete_tick(False)
     last_cart_location = my_track.active_carts()[0].location
     print('Part 2 Answer:', str(last_cart_location[0])+','+str(last_cart_location[1]))
 
