@@ -15,12 +15,10 @@ class Example():
 
     def perform_ops(self):
         op_list = ['addr', 'addi', 'mulr', 'muli','setr','seti','banr','bani','borr','bori','gtir','gtri','gtrr','eqir','eqri','eqrr']
-
         register_A = self.before[self.instruction[1]]
         value_A = self.instruction[1]
         register_B = self.before[self.instruction[2]]
         value_B = self.instruction[2]
-
         for op in op_list:
             result = self.before.copy()
             inst = [op] + self.instruction[1:]
