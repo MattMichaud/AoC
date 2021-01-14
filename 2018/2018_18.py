@@ -118,14 +118,12 @@ def part2(filename, time=1000000000):
         iteration += 1
         if any(np.array_equal(lumber.current_state, prev) for prev in state_list):
             cycle = True
-            print('Cycle Found after',iteration,'minutes')
             match_index = 0
             for index, arr in enumerate(state_list):
                 if np.array_equal(lumber.current_state, arr):
                     match_index = index
                     break
             cycle_len = len(state_list) - match_index
-            print('Cycle Length:', cycle_len)
         else:
             state_list.append(lumber.current_state.copy())
     while iteration + cycle_len <= time:
