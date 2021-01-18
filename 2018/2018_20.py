@@ -121,9 +121,7 @@ class RoomMap():
         raise NotFound('No path from {} to {}'.format(start, goal))
 
     def update_room_distances(self):
-        room_index = 1
         for r in self.rooms:
-            room_index += 1
             shortest_path = self.bfs_search(self.start_loc, r)
             distance = len(shortest_path) - 1
             self.room_distances[r] = distance
