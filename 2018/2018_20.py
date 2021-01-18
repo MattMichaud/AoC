@@ -137,7 +137,7 @@ class RoomMap():
                 room_count += 1
         return(room_count)
 
-with open('2018_20_input.txt','r') as f:
+with open('2018/inputs/2018_20_input.txt','r') as f:
     room_regex = f.read()
 
 my_map = RoomMap(room_regex)

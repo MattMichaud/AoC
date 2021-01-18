@@ -111,6 +111,6 @@ def part2(filename):
     last_cart_location = my_track.active_carts()[0].location
     print('Part 2 Answer:', str(last_cart_location[0])+','+str(last_cart_location[1]))
 
-input_file = '2018_13_input.txt'
+input_file = '2018/inputs/2018_13_input.txt'
 part1(input_file)
 part2(input_file)

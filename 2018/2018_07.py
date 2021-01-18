@@ -67,7 +67,7 @@ def part2(filename, total_workers):
     print('Part 2 Answer:', time-1)
 
 
-input_file = '2018_07_input.txt'
+input_file = '2018/inputs/2018_07_input.txt'
 #input_file = 'test.txt'
 part1(input_file)
 part2(input_file, 5)

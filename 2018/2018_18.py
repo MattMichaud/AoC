@@ -133,7 +133,7 @@ def part2(filename, time=1000000000):
         lumber.advance_one_minute()
     print('Part 2 Answer:',lumber.resource_value())
 
-input_file = '2018_18_input.txt'
+input_file = '2018/inputs/2018_18_input.txt'
 part1(input_file)
 part2(input_file)
 

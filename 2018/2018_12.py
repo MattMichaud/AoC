@@ -74,14 +74,14 @@ class PottedPlants():
         return(sum(plants))
 
 def part1():
-    input_file = '2018_12_input.txt'
+    input_file = '2018/inputs/2018_12_input.txt'
     plants = PottedPlants()
     plants.init_from_file(input_file)
     plants.advance_multiple(20)
     print('Part 1 Answer:', plants.sum_plants())
 
 def part2():
-    input_file = '2018_12_input.txt'
+    input_file = '2018/inputs/2018_12_input.txt'
     plants = PottedPlants()
     plants.init_from_file(input_file)
     print('Part 2 Answer:', plants.advance_multiple_big(50000000000))

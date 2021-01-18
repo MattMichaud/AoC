@@ -37,7 +37,7 @@ def part2(li):
             if test: return(test)
 
 
-data = parse_input('2018_02_input.txt')
+data = parse_input('2018/inputs/2018_02_input.txt')
 print('Part 1 Answer:',part1(data))
 print('Part 2 Answer:',part2(data))
 

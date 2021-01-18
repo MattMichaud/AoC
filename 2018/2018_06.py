@@ -90,6 +90,6 @@ def part2(filename, mindist):
     safe = mark_safe_points(grid, points, mindist)
     print('Part 2 Answer:',safe)
 
-input_file = '2018_06_input.txt'
+input_file = '2018/inputs/2018_06_input.txt'
 part1(input_file)
 part2(input_file, 10000)

@@ -100,5 +100,5 @@ def both_parts(filename):
     print('Part 1 Answer:', count_dict['~'] + count_dict['|'])
     print('Part 2 Answer:', count_dict['~'])
 
-input_file = '2018_17_input.txt'
+input_file = '2018/inputs/2018_17_input.txt'
 both_parts(input_file)

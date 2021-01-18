@@ -24,6 +24,6 @@ def part2(filename):
     shortest = min([len(stack_redcution(polymer.replace(c,'').replace(c.upper(),''))) for c in ascii_lowercase])
     print('Part 2 Answer:', shortest)
 
-input_file = '2018_05_input.txt'
+input_file = '2018/inputs/2018_05_input.txt'
 part1(input_file)
 part2(input_file)

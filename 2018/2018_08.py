@@ -40,7 +40,7 @@ def node_value(li):
         return(meta_sum, remaining_li)
 
 
-input_file = '2018_08_input.txt'
+input_file = '2018/inputs/2018_08_input.txt'
 input_list = parse_input(input_file)
 result, _ = sum_metadata(input_list)
 print('Part 1 Answer:', result)

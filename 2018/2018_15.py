@@ -50,7 +50,7 @@ def reading_order(pos):
     return pos[1], pos[0]
 
 def solve(d, no_elves_die):
-    input_data = open('2018_15_input.txt').read()
+    input_data = open('2018/inputs/2018_15_input.txt').read()
     data = [list(line) for line in input_data.split('\n')]
 
     # extract characters / units from the grid and replace with dots

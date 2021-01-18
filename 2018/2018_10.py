@@ -84,7 +84,7 @@ def get_points(filename):
 
 
 my_sky = Sky()
-original_points = get_points('2018_10_input.txt')
+original_points = get_points('2018/inputs/2018_10_input.txt')
 for point in original_points:
     my_sky.add_point(new_point=point, update=False)
 my_sky.update_stats()

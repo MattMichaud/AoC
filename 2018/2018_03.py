@@ -51,7 +51,7 @@ def part2(claims, fabric):
     else:
         return(0)
 
-claims = parse_input('2018_03_input.txt')
+claims = parse_input('2018/inputs/2018_03_input.txt')
 fabric = process_claims(claims)
 test_input = ['#1 @ 1,3: 4x4','#2 @ 3,1: 4x4','#3 @ 5,5: 2x2']
 print('Part 1 Answer:',part1(fabric))

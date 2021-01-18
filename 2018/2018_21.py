@@ -55,7 +55,7 @@ class Computer():
         while self.instruction_pointer in range(len(self.instruction_list)):
             self.execute_instruction(self.instruction_list[self.instruction_pointer], verbose)
 
-comp = Computer('2018_21_input.txt')
+comp = Computer('2018/inputs/2018_21_input.txt')
 done = False
 unique_vals = set()
 last_unique = None

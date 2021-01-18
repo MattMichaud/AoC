@@ -77,6 +77,6 @@ def part2(filename):
     max_reg = max(comp.registers)
     print('Part 2 Answer:',sum_factors(max_reg))
 
-input_file = '2018_19_input.txt'
+input_file = '2018/inputs/2018_19_input.txt'
 part1(input_file)
 part2(input_file)

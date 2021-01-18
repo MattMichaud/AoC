@@ -123,5 +123,5 @@ def part2(examples_filename, program_fileame):
         current_registers = execute_instruction(inst, current_registers, opcode_map)
     print('Part 2 Answer:', current_registers[0])
 
-part1('2018_16_input_1.txt')
-part2('2018_16_input_1.txt', '2018_16_input_2.txt')
+part1('2018/inputs/2018_16_input_1.txt')
+part2('2018/inputs/2018_16_input_1.txt', '2018/inputs/2018_16_input_2.txt')

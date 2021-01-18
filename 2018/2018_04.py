@@ -103,6 +103,6 @@ def part2(filename):
     print('Part 2 Answer:',most_frequenct_guard * most_frequent_minute)
 
 
-input_file = '2018_04_input.txt'
+input_file = '2018/inputs/2018_04_input.txt'
 part1(input_file)
 part2(input_file)

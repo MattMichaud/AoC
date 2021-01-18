@@ -22,7 +22,7 @@ def part2(li):
         index = (index + 1) % len(li)
     return(result)
 
-data = parse_input('2018_01_input.txt')
+data = parse_input('2018/inputs/2018_01_input.txt')
 print('Part 1 Answer:',part1(data))
 print('Part 2 Answer:',part2(data))
 
