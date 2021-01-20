@@ -13,3 +13,6 @@ def data_import(filename, cast=str, split_char=None, rstrip=False):
 
             line = file.readline()
     return data
+
+def tuple_add(a, b):
+    return(tuple(map(sum, zip(a, b))))
