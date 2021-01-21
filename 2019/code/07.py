@@ -93,6 +93,5 @@ def part2(filename):
 
 
 filename = '2019/inputs/07.txt'
-#filename = 'test.txt'
 part1(filename)
 part2(filename)
