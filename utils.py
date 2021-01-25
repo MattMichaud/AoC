@@ -19,17 +19,20 @@ def tuple_add(a, b):
 
 
 class IntCodeComputer:
-    def __init__(self,programCode,id =0, relBase=0,indx=0,emptySpace=1000,inptArr=[]):
+    def __init__(self,program_code,id =0, relBase=0,indx=0,empty_space=1000,inptArr=[]):
         self.relativeBase =0
         self.memory =[]
-        self.memory = programCode.copy()
-        for i in range(emptySpace):
+        self.memory = program_code.copy()
+        for i in range(empty_space):
             self.memory.append(0)
         self.index=indx
-        self.inputArray=inptArr.copy()
-        self.outputArray=[]
+        self.input_array=inptArr.copy()
+        self.output_array=[]
         self.id=id
         self.finished = False
+
+    def set_single_memory_address(self, pos, value):
+        self.memory[pos] = value
 
     def compute(self):#computes until there's an input requiered
         while(True):
@@ -42,26 +45,26 @@ class IntCodeComputer:
 
             #reading parameters according to the given parameter modes ----------------------
             parameters = []
-            parameterMode = str(self.memory[self.index][:3])
+            param_mode = str(self.memory[self.index][:3])
             OpCode = str(self.memory[self.index])[-2:]
             self.memory[self.index]=int(self.memory[self.index])
-            if (parameterMode[2] == "0"):
+            if (param_mode[2] == "0"):
                 parameters.append(int(self.memory[self.index + 1]))
-            elif (parameterMode[2] == "1"):
+            elif (param_mode[2] == "1"):
                 parameters.append(self.index + 1)
             else:#paramMode 2
                 parameters.append(int(self.memory[self.index + 1]) +self.relativeBase)
 
-            if (parameterMode[1] == "0"):
+            if (param_mode[1] == "0"):
                 parameters.append(int(self.memory[self.index + 2]))
-            elif (parameterMode[1] == "1"):
+            elif (param_mode[1] == "1"):
                 parameters.append(self.index + 2)
             else:#paramMode 2
                 parameters.append(self.memory[self.index + 2] + self.relativeBase)
 
-            if (parameterMode[0] == "0"):
+            if (param_mode[0] == "0"):
                 parameters.append(int(self.memory[self.index + 3]))
-            elif (parameterMode[0] == "1"):
+            elif (param_mode[0] == "1"):
                 parameters.append(self.index + 3)
             else:#paramMode 2
                 parameters.append(int(self.memory[self.index + 3]) + self.relativeBase)
@@ -75,16 +78,16 @@ class IntCodeComputer:
                 self.memory[parameters[2]] = int(self.memory[parameters[0]]) * int(self.memory[parameters[1]])
                 self.index += 4
             elif(OpCode=="03"):
-                if(len(self.inputArray)!=0):
-                    self.memory[parameters[0]]=self.inputArray[0]
+                if(len(self.input_array)!=0):
+                    self.memory[parameters[0]]=self.input_array[0]
                     self.index+=2
-                    self.inputArray.pop(0)
+                    self.input_array.pop(0)
                 else:
                     #print("waiting input")
                     break
             elif(OpCode=="04"):
                 #print("output from int comp "+str(self.id)+ "  :" +str(self.memory[parameters[0]]))
-                self.outputArray.append(self.memory[parameters[0]])
+                self.output_array.append(self.memory[parameters[0]])
                 self.index+=2
             elif(OpCode=="05"):
                 if(self.memory[parameters[0]]!=0):
@@ -116,5 +119,14 @@ class IntCodeComputer:
                 self.finished=True
                 break
 
-    def addInput(self,input):
-        self.inputArray.append(input)
+    def add_input(self,input):
+        self.input_array.append(input)
+
+    def print_outputs(self):
+        print(self.output_array)
+
+    def get_output(self):
+        return self.output_array
+
+    def flush_outputs(self):
+        self.output_array.clear()
