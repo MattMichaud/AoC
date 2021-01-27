@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from utils import IntCodeComputer
+from intcode import IntCodeComputer
 import pygame
 
 EMPTY = 0

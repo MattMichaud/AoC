@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from utils import IntCodeComputer
+from intcode import IntCodeComputer
 
 def update_pos_dir(currX, currY, curr_dir, comp_output):
 
@@ -25,15 +25,15 @@ def part1(filename):
     direction = 0 # 0 up / 1 right / 2 down / 3 left
     posX = posY = int(hull_size/2) # start in the middle
 
-    comp0 = IntCodeComputer(programCode=data)
-    comp0.addInput(hull[posX][posY][0])
+    comp0 = IntCodeComputer(program_code=data)
+    comp0.add_input(hull[posX][posY][0])
     while(comp0.finished is not True):
         comp0.compute()
-        outputFromComp = comp0.outputArray[-2:]
+        outputFromComp = comp0.output_array[-2:]
         hull[posX][posY][0] = outputFromComp[0]
         hull[posX][posY][1] = 1
         posX, posY, direction = update_pos_dir(posX, posY, direction, outputFromComp[1])
-        comp0.addInput(hull[posX][posY][0])
+        comp0.add_input(hull[posX][posY][0])
 
     total_painted = sum(1 for i in range(hull_size) for j in range(hull_size) if hull[i][j][1] == 1)
     print('Part 1 Answer: {}'.format(total_painted))
@@ -46,16 +46,16 @@ def part2(filename):
     direction = 0 # 0 up / 1 right / 2 down / 3 left
     posX = posY = int(hull_size/2) # start in the middle
 
-    comp0 = IntCodeComputer(programCode=data)
+    comp0 = IntCodeComputer(program_code=data)
     hull[posX][posY][0]=1
-    comp0.addInput(hull[posX][posY][0])
+    comp0.add_input(hull[posX][posY][0])
     while(comp0.finished is not True):
         comp0.compute()
-        outputFromComp = comp0.outputArray[-2:]
+        outputFromComp = comp0.output_array[-2:]
         hull[posX][posY][0] = outputFromComp[0]
         hull[posX][posY][1] = 1
         posX, posY, direction = update_pos_dir(posX, posY, direction, outputFromComp[1])
-        comp0.addInput(hull[posX][posY][0])
+        comp0.add_input(hull[posX][posY][0])
 
     ###Some non vital code to make the image more readable
     left_most = right_most = up_most = down_most = -1
