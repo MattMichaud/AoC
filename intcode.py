@@ -59,6 +59,7 @@ class IntCodeComputer:
                 self.index += 4
             elif(OpCode=="03"):
                 if(len(self.input_array)!=0):
+                    #print('processing input {} at ip {}'.format(self.input_array[0], self.id))
                     self.memory[parameters[0]]=self.input_array[0]
                     self.index+=2
                     self.input_array.pop(0)
@@ -107,6 +108,13 @@ class IntCodeComputer:
 
     def get_output(self):
         return self.output_array
+
+    def pop_output(self):
+        if len(self.output_array) > 0:
+            out = self.output_array.pop()
+            return out
+        else:
+            return None
 
     def flush_outputs(self):
         self.output_array.clear()
