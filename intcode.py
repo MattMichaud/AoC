@@ -118,3 +118,7 @@ class IntCodeComputer:
 
     def flush_outputs(self):
         self.output_array.clear()
+
+
+def parse_intcode(filename):
+    return [int(c) for c in open(filename, 'r').read().split(',')]
