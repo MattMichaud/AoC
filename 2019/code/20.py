@@ -88,12 +88,6 @@ def walk2(start3,goal3):
     been[start3] = True
     nxt = [start3]
     for step in count(1):
-        if step%1000==0:
-            a,b=nxt[0][2],nxt[0][2]
-            for n in nxt:
-                a=min(a,n[2])
-                b=max(b,n[2])
-            #print(f'step {step}, running {len(nxt)} robots, in layers from {a} to {b}')
         if len(nxt)==0: break
         cur,nxt = nxt,[]
         for p3 in cur:
