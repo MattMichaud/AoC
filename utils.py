@@ -17,4 +17,6 @@ def data_import(filename, cast=str, split_char=None, rstrip=False):
 def tuple_add(a, b):
     return(tuple(map(sum, zip(a, b))))
 
-
+def read_intcode(file) -> list:
+    with open(file) as f:
+        return list(map(int, f.read().split(',')))
