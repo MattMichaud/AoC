@@ -20,3 +20,7 @@ def tuple_add(a, b):
 def read_intcode(file) -> list:
     with open(file) as f:
         return list(map(int, f.read().split(',')))
+
+def read_map(file) -> list:
+    with open(file) as f:
+        return [list(line.rstrip('\n')) for line in f.readlines()]
