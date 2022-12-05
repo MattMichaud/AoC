@@ -37,25 +37,22 @@ def parse_crates(crate_list, total):
 
 
 def parse_moves(move_list):
-    res = []
+    moves = []
     for l in move_list:
         l = l.replace("move ", "").replace(" from ", ",").replace(" to ", ",")
         l = l.split(",")
         l = [eval(i) for i in l]
-        res.append(l)
-    return res
+        moves.append(l)
+    return moves
 
 
 def accomplish_moves(crates, moves, keepOrder=False):
     for m in moves:
         qty, source, dest = m
-        temp_list = []
-        for i in range(qty):
-            crate = crates[source].pop()
-            temp_list.append(crate)
+        temp_list = [crates[source].pop() for i in range(qty)]
         if keepOrder:
             temp_list.reverse()
-        crates[dest] = crates[dest] + temp_list
+        crates[dest] += temp_list
     return crates
 
 
