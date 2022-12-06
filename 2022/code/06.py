@@ -1,33 +1,16 @@
-import sys
-import re
-
-sys.path.append(".")
-from utils import data_import
-
-
 def isUniqueChars(st):
-
-    # String length cannot be more than
-    # 256.
-    if len(st) > 256:
+    if len(set(st)) == len(st):
+        return True
+    else:
         return False
 
-    # Initialize occurrences of all characters
-    char_set = [False] * 128
 
-    # For every character, check if it exists
-    # in char_set
-    for i in range(0, len(st)):
-
-        # Find ASCII value and check if it
-        # exists in set.
-        val = ord(st[i])
-        if char_set[val]:
-            return False
-
-        char_set[val] = True
-
-    return True
+def findStartOfPacketMarker(buffer, packet_length):
+    for i in range(packet_length, len(buffer)):
+        test_packet = buffer[i - packet_length : i]
+        if isUniqueChars(test_packet):
+            return i
+    return -1
 
 
 test_val = "bvwbjplbgvbhsrlpgdmjqwftvncz"
@@ -37,3 +20,8 @@ for i in range(14, len(test_val)):
     if isUniqueChars(test_string):
         print(i)
         break
+
+filename = "2022/inputs/06.txt"
+puzzle_input = open(filename, "r").readline()
+print("Part 1 Answer:", findStartOfPacketMarker(puzzle_input, 4))
+print("Part 2 Answer:", findStartOfPacketMarker(puzzle_input, 14))
