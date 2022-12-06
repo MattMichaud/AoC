@@ -47,8 +47,7 @@ def parse_moves(move_list):
 
 
 def accomplish_moves(crates, moves, keepOrder=False):
-    for m in moves:
-        qty, source, dest = m
+    for qty, source, dest in moves:
         temp_list = [crates[source].pop() for i in range(qty)]
         if keepOrder:
             temp_list.reverse()
@@ -64,13 +63,11 @@ def get_top_letters(crates):
 
 
 def part1(crates, moves):
-    crates = accomplish_moves(crates, moves)
-    print("Part 1 Answer:", get_top_letters(crates))
+    print("Part 1 Answer:", get_top_letters(accomplish_moves(crates, moves)))
 
 
 def part2(crates, moves):
-    crates = accomplish_moves(crates, moves, True)
-    print("Part 2 Answer:", get_top_letters(crates))
+    print("Part 2 Answer:", get_top_letters(accomplish_moves(crates[:], moves, True)))
 
 
 input_file = "2022/inputs/05.txt"
