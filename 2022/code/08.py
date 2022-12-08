@@ -14,10 +14,11 @@ for y in range(height):
         if x in [0, width - 1] or y in [0, height - 1]:
             visible[(x, y)] = True
         else:
-            vis_up = all([trees[y][x] > trees[k][x] for k in range(0, y)])
-            vis_down = all([trees[y][x] > trees[k][x] for k in range(y + 1, height)])
-            vis_left = all([trees[y][x] > trees[y][j] for j in range(0, x)])
-            vis_right = all([trees[y][x] > trees[y][j] for j in range(x + 1, width)])
+            tree_height = trees[y][x]
+            vis_up = all([tree_height > trees[k][x] for k in range(0, y)])
+            vis_down = all([tree_height > trees[k][x] for k in range(y + 1, height)])
+            vis_left = all([tree_height > trees[y][j] for j in range(0, x)])
+            vis_right = all([tree_height > trees[y][j] for j in range(x + 1, width)])
             visible[(x, y)] = vis_up or vis_down or vis_left or vis_right
 
 total_visible = sum([k for k in visible.values()])
