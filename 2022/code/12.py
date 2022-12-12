@@ -1,16 +1,11 @@
 # --- Day 12: Hill Climbing Algorithm ---
 import networkx as nx
 
-# Read Input, Parse into elevations
-# Go through each point, determine graph edges
-# Create directed graph
-# find shortest path
-
 test_input = "test.txt"
 puzzle_input = "2022/inputs/12.txt"
 current_input = puzzle_input
 
-# Read Input, Parse into elevations
+# Read Input, Get start_loc, end_loc, convert into elevations
 input = [list(l) for l in open(current_input, "r").read().strip().split("\n")]
 width = len(input[0])
 height = len(input)
@@ -24,7 +19,7 @@ for y in range(height):
             input[y][x] = "z"
         input[y][x] = ord(input[y][x]) - 96
 
-# Go through each point, determine graph edges and create directed graph
+# Build directed graph DG
 DG = nx.DiGraph()
 offsets = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 for y in range(height):
@@ -44,10 +39,9 @@ part1 = nx.shortest_path_length(DG, start_loc, end_loc)
 print("Part 1:", part1)
 
 # find shortest path for each node with height 1
-lowest_nodes = [
-    x
+distances = [
+    nx.shortest_path_length(DG, x, end_loc)
     for x, y in DG.nodes(data=True)
     if y["height"] == 1 and nx.has_path(DG, x, end_loc)
 ]
-min_dist = min(nx.shortest_path_length(DG, loc, end_loc) for loc in lowest_nodes)
-print("Part 2:", min_dist)
+print("Part 2:", min(distances))
