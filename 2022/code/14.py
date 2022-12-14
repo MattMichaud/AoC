@@ -23,54 +23,41 @@ def build_cave(filename, start_loc):
 def drop_sand(c, drop_loc, floor=False, bottom=0):
     if not floor:
         bottom = max(y for x, y in c if c[(x, y)] == "#") + 1
-    done = False
-    hit_bottom = False
     current_sand_loc = drop_loc
-    sand_moved = False
-    while not done:
+    sand_moved = True
+    hit_bottom = False
+    while sand_moved:
         sand_moved = False
         for direction in ["D", "DL", "DR"]:
             offset = {"D": (0, 1), "DL": (-1, 1), "DR": (1, 1)}.get(direction)
-            if not sand_moved:
+            if not sand_moved and not hit_bottom:
                 check_loc = (
                     current_sand_loc[0] + offset[0],
                     current_sand_loc[1] + offset[1],
                 )
                 if check_loc[1] >= bottom:
-                    done = True
                     hit_bottom = True
-                    sand_moved = True
                 elif check_loc not in c.keys():
-                    current_sand_loc = check_loc
                     sand_moved = True
-        if not hit_bottom and not sand_moved:
-            done = True
+                    current_sand_loc = check_loc
     if floor or not hit_bottom:
         c[current_sand_loc] = "o"
 
     return hit_bottom
 
 
-def display_cave(c, top_left, bottom_right):
-    for y in range(top_left[1], bottom_right[1] + 1):
-        row = "".join(
-            c.get((x, y), ".") for x in range(top_left[0], bottom_right[0] + 1)
-        )
-        print(row)
-
-
 test_input = "test.txt"
 puzzle_input = "2022/inputs/14.txt"
 current_file = puzzle_input
-
 start_loc = (500, 0)
-part1_cave = build_cave(current_file, start_loc)
-while not drop_sand(part1_cave, start_loc):
-    next
-print("Part 1:", len([v for v in part1_cave.values() if v == "o"]))
 
-part2_cave = build_cave(current_file, start_loc)
-floor_depth = max(y for x, y in part2_cave.keys()) + 2
-while part2_cave[start_loc] == "+":
-    drop_sand(part2_cave, start_loc, floor=True, bottom=floor_depth)
-print("Part 2:", len([v for v in part2_cave.values() if v == "o"]))
+cave = build_cave(current_file, start_loc)
+while not drop_sand(cave, start_loc):
+    next
+print("Part 1:", len([v for v in cave.values() if v == "o"]))
+
+cave = build_cave(current_file, start_loc)
+floor_depth = max(y for x, y in cave.keys()) + 2
+while cave[start_loc] == "+":
+    drop_sand(cave, start_loc, floor=True, bottom=floor_depth)
+print("Part 2:", len([v for v in cave.values() if v == "o"]))
