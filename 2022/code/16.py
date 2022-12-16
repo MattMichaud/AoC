@@ -4,7 +4,7 @@ test_file = "test.txt"
 puzzle_file = "2022/inputs/16.txt"
 current_file = puzzle_file
 
-MAX_PATHS = 20000
+MAX_PATHS = 15000
 
 
 def parse_input(filename):
@@ -40,7 +40,7 @@ def part1(t, r, sl):
     return max(paths)
 
 
-def get_moves_valves(t, r, curr_loc, pth, ovs):
+def get_paths_valves(t, r, curr_loc, pth, ovs):
     # return list of options to either open valve or use tunnel
     res = []
     for loc in t[curr_loc]:
@@ -67,11 +67,11 @@ def part2(t, r, sl):
             pressure = sum(r[ov] for ov in open_valves)
             total_pressure += pressure
             # either move or open for me and ele
-            for loc_me, open_me in get_moves_valves(t, r, me_loc, path[0], open_valves):
-                for loc_ele, open_ele in get_moves_valves(
+            for pth_me, open_me in get_paths_valves(t, r, me_loc, path[0], open_valves):
+                for pth_ele, open_ele in get_paths_valves(
                     t, r, ele_loc, path[1], open_me
                 ):
-                    new_paths.append((total_pressure, ([loc_me, loc_ele]), open_ele))
+                    new_paths.append((total_pressure, (pth_me, pth_ele), open_ele))
         paths = new_paths
     return max(paths)
 
