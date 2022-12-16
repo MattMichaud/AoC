@@ -1,10 +1,7 @@
 import re
 
-test_file = "test.txt"
-puzzle_file = "2022/inputs/16.txt"
-current_file = puzzle_file
 
-MAX_PATHS = 15000
+MAX_SCENARIOS = 15000  # 10k wasn't enough for part 2 ... wrong answer
 
 
 def parse_input(filename):
@@ -17,31 +14,8 @@ def parse_input(filename):
     return tunnels, flow_rates
 
 
-def part1(t, r, sl):
-    # paths is a list of tuples containing (pressure, path as list, opened as set)
-    paths = [(0, [sl], set())]
-    for time in range(1, 31):
-        # slim down paths
-        if len(paths) > MAX_PATHS:
-            paths.sort(reverse=True)
-            paths = paths[:MAX_PATHS]
-        # print("time:", time, "path count:", len(paths))
-        new_paths = []
-        for total_pressure, path, open_valves in paths:
-            current_loc = path[-1]
-            pressure = sum(r[ov] for ov in open_valves)
-            total_pressure += pressure
-            # either move or open
-            for loc in t[current_loc]:
-                new_paths.append((total_pressure, path + [loc], open_valves.copy()))
-            if r[current_loc] > 0 and current_loc not in open_valves:
-                new_paths.append((total_pressure, path, open_valves | {current_loc}))
-        paths = new_paths
-    return max(paths)
-
-
-def get_paths_valves(t, r, curr_loc, pth, ovs):
-    # return list of options to either open valve or use tunnel
+def get_paths_valves_opts(t, r, curr_loc, pth, ovs):
+    # return list of options to either add to path (move) or open a valve
     res = []
     for loc in t[curr_loc]:
         res.append((pth + [loc], ovs.copy()))
@@ -50,36 +24,64 @@ def get_paths_valves(t, r, curr_loc, pth, ovs):
     return res
 
 
+def part1(tunnels, rates, start_loc):
+    # scenarios is a list of tuples containing (pressure, paths as list, opened valves as set)
+    scenarios = [(0, [start_loc], set())]
+    for time in range(1, 31):
+        # slim down scenarios
+        if len(scenarios) > MAX_SCENARIOS:
+            scenarios.sort(reverse=True)
+            scenarios = scenarios[:MAX_SCENARIOS]
+        updated_scenarios = []
+        for total_pressure, path, open_valves in scenarios:
+            current_loc = path[-1]
+            pressure = sum(rates[ov] for ov in open_valves)
+            total_pressure += pressure
+            # either move or open
+            for new_path, new_open in get_paths_valves_opts(
+                tunnels, rates, current_loc, path, open_valves
+            ):
+                updated_scenarios.append((total_pressure, new_path, new_open))
+        scenarios = updated_scenarios
+    return max(scenarios)
+
+
 # part 2 is similar but essentially 2 people (me, elephant) operating each second for 26 seconds
-def part2(t, r, sl):
-    # paths is a list of tuples containing (total pressure, path as list of tuples, opened as set)
-    paths = [(0, ([sl], [sl]), set())]
+def part2(tunnels, rates, start_loc):
+    # scenarios is a list of tuples containing (total pressure, me & ele paths as list of tuples, opened valves as set)
+    scenarios = [(0, ([start_loc], [start_loc]), set())]
     for time in range(1, 27):
-        # slim down paths
-        if len(paths) > MAX_PATHS:
-            paths.sort(reverse=True)
-            paths = paths[:MAX_PATHS]
-        # print("time:", time, "path count:", len(paths))
-        new_paths = []
-        for total_pressure, path, open_valves in paths:
+        # slim down scenarios
+        if len(scenarios) > MAX_SCENARIOS:
+            scenarios.sort(reverse=True)
+            scenarios = scenarios[:MAX_SCENARIOS]
+        updated_scenarios = []
+        for total_pressure, path, open_valves in scenarios:
             me_loc = path[0][-1]
             ele_loc = path[1][-1]
-            pressure = sum(r[ov] for ov in open_valves)
+            pressure = sum(rates[ov] for ov in open_valves)
             total_pressure += pressure
-            # either move or open for me and ele
-            for pth_me, open_me in get_paths_valves(t, r, me_loc, path[0], open_valves):
-                for pth_ele, open_ele in get_paths_valves(
-                    t, r, ele_loc, path[1], open_me
+            # either move or open for me, then move or open for and ele (with new valves I opened)
+            for new_path_me, new_open_me in get_paths_valves_opts(
+                tunnels, rates, me_loc, path[0], open_valves
+            ):
+                for new_path_ele, new_open_ele in get_paths_valves_opts(
+                    tunnels, rates, ele_loc, path[1], new_open_me
                 ):
-                    new_paths.append((total_pressure, (pth_me, pth_ele), open_ele))
-        paths = new_paths
-    return max(paths)
+                    updated_scenarios.append(
+                        (total_pressure, (new_path_me, new_path_ele), new_open_ele)
+                    )
+        scenarios = updated_scenarios
+    return max(scenarios)
 
 
-tunnels, rates = parse_input(current_file)
+test_file = "test.txt"
+puzzle_file = "2022/inputs/16.txt"
+current_file = puzzle_file
+puzzle_tunnels, puzzle_rates = parse_input(current_file)
 
-max_pressure, *_ = part1(tunnels, rates, "AA")
+max_pressure, *_ = part1(puzzle_tunnels, puzzle_rates, "AA")
 print("Part 1:", max_pressure)
 
-pressure, *_ = part2(tunnels, rates, "AA")
+pressure, *_ = part2(puzzle_tunnels, puzzle_rates, "AA")
 print("Part 2:", pressure)
