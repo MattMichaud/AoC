@@ -29,8 +29,8 @@ def get_row(t, r):
 
 def display_tower(t, h, start_height=FLOOR_HEIGHT):
     for y in range(h, start_height + 1):
-        row = "".join([t.get((x, y), ".") for x in range(LEFT_WALL, RIGHT_WALL + 1)])
-        print(y, row, row == "|###.###|")
+        row = get_row(tower, y)
+        print(y, row)
 
 
 def add_rock(t, r, mh):
@@ -154,12 +154,13 @@ def cycle(list, min_length=0):
 tower_list = tower_as_list(tower, curr_max_height * -1)
 tower_list = tower_list[::-1]
 cycle_start = 0
+min_cycle_length = 5
 cycle_found = False
 while not cycle_found:
     test_list = tower_list[cycle_start:]
-    if len(test_list) < 5:
+    if len(test_list) < min_cycle_length:
         break
-    c = cycle(tower_list[cycle_start:], 5)
+    c = cycle(tower_list[cycle_start:], min_cycle_length)
     if len(c) > 0:
         cycle_found = True
     else:
@@ -168,8 +169,8 @@ while not cycle_found:
 start_row_index = -1 * cycle_start
 start_row_pattern = get_row(tower, start_row_index)
 
-target_row_index = -1 * (cycle_start + len(c))
-target_row_pattern = get_row(tower, target_row_index)
+end_row_index = -1 * (cycle_start + len(c))
+end_row_pattern = get_row(tower, end_row_index)
 
 # drop rocks and count until we get matching patterns
 
@@ -213,7 +214,7 @@ while start_match == False or end_match == False:
         start_match = True
         start_rocks_dropped = rock_counter
         start_max_height = curr_max_height
-    if get_row(tower, target_row_index) == target_row_pattern:
+    if get_row(tower, end_row_index) == end_row_pattern:
         end_match = True
         end_rocks_dropped = rock_counter
         end_max_height = curr_max_height
