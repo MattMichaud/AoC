@@ -81,14 +81,14 @@ def find_max_geodes(
                 (
                     elapsed_time + 1,
                     (
-                        ore - geo_rob_ore_cost + ore_robs,
+                        ore + ore_robs - geo_rob_ore_cost,  # spend ore
                         cla + cla_robs,
-                        obs - geo_rob_obs_cost + obs_robs,
+                        obs + obs_robs - geo_rob_obs_cost,  # spend obs
                         geo + geo_robs,
                         ore_robs,
                         cla_robs,
                         obs_robs,
-                        geo_robs + 1,
+                        geo_robs + 1,  # add geo robot
                     ),
                 )
             )
@@ -109,11 +109,11 @@ def find_max_geodes(
                     (
                         elapsed_time + 1,
                         (
-                            ore - ore_rob_ore_cost + ore_robs,
+                            ore + ore_robs - ore_rob_ore_cost,  # spend ore
                             cla + cla_robs,
                             obs + obs_robs,
                             geo + geo_robs,
-                            ore_robs + 1,
+                            ore_robs + 1,  # add ore robot
                             cla_robs,
                             obs_robs,
                             geo_robs,
@@ -132,12 +132,12 @@ def find_max_geodes(
                     (
                         elapsed_time + 1,
                         (
-                            ore - cla_rob_ore_cost + ore_robs,
+                            ore + ore_robs - cla_rob_ore_cost,  # spend ore
                             cla + cla_robs,
                             obs + obs_robs,
                             geo + geo_robs,
                             ore_robs,
-                            cla_robs + 1,
+                            cla_robs + 1,  # add clay robot
                             obs_robs,
                             geo_robs,
                         ),
@@ -156,13 +156,13 @@ def find_max_geodes(
                     (
                         elapsed_time + 1,
                         (
-                            ore - obs_rob_ore_cost + ore_robs,
-                            cla - obs_rob_cla_cost + cla_robs,
+                            ore + ore_robs - obs_rob_ore_cost,  # spend ore
+                            cla + cla_robs - obs_rob_cla_cost,  # spend clay
                             obs + obs_robs,
                             geo + geo_robs,
                             ore_robs,
                             cla_robs,
-                            obs_robs + 1,
+                            obs_robs + 1,  # add obsidian robot
                             geo_robs,
                         ),
                     )
