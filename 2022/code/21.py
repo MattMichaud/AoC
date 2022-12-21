@@ -5,33 +5,25 @@ def parse_input(file):
     input_lines = [line for line in open(curr, "r").read().strip().split("\n")]
     jobs = {}
     for line in input_lines:
-        words = line.split()
-        monkey_name = words[0][:-1]
-        expression = line.split(":")[1].split()
-        jobs[monkey_name] = expression
+        jobs[line.split()[0][:-1]] = line.split(":")[1].split()
     return jobs
 
 
 def job_output(jobs, name, human_number):
     expression_parts = jobs[name]
+    # need for part 2 to process the human input
     if name == "humn" and human_number >= 0:
-        return human_number  # added for part 2 of problem
+        return human_number
 
     # if we have a number, return it, otherwise do the expression indicated (recursive)
     if len(expression_parts) < 2:
         return int(expression_parts[0])
     else:
-        expression_part1 = job_output(jobs, expression_parts[0], human_number)
-        expression_part2 = job_output(jobs, expression_parts[2], human_number)
-        op = expression_parts[1]
-        if op == "+":
-            return expression_part1 + expression_part2
-        elif op == "-":
-            return expression_part1 - expression_part2
-        elif op == "*":
-            return expression_part1 * expression_part2
-        elif op == "/":
-            return expression_part1 / expression_part2
+        return eval(
+            str(job_output(jobs, expression_parts[0], human_number))
+            + expression_parts[1]
+            + str(job_output(jobs, expression_parts[2], human_number))
+        )
 
 
 test_input = "test.txt"
@@ -50,9 +42,6 @@ root_exp2 = monkey_jobs["root"][2]
 # one of them isn't dependent on the input, figure out which one, and make sure that's set to root_exp2
 if job_output(monkey_jobs, root_exp2, 0) != job_output(monkey_jobs, root_exp2, 1):
     root_exp1, root_exp2 = root_exp2, root_exp1
-assert job_output(monkey_jobs, root_exp1, 0) != job_output(monkey_jobs, root_exp1, 1)
-assert job_output(monkey_jobs, root_exp2, 0) == job_output(monkey_jobs, root_exp2, 1)
-
 
 # try it both directions, only one should work and produce an output
 expr1_goal = job_output(monkey_jobs, root_exp2, 0)
