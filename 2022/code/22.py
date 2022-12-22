@@ -187,58 +187,66 @@ def follow_path_part2(m, p, dir_list):
             ):
                 # you are trying to leave current face
                 new_face, new_dir = face_direction_transitions[(face_num, direction)]
-                print("left face", face_num, "heading", direction)
-                print("entered face", new_face, "heading", new_dir)
                 # 0 = up, 1 = right, 2 = down, 3 = left
                 if direction == 2:
                     if new_dir == 2:  # down to down
-                        row = 0
-                        col = col
+                        next_row = 0
+                        next_col = col
                     elif new_dir == 3:  # down to left
-                        row = col
-                        col = face_size - 1
+                        next_row = col
+                        next_col = face_size - 1
                     else:
                         print("missing new_dir when dir = down")
                 elif direction == 0:
                     if new_dir == 0:  # up to up
-                        row = face_size - 1
-                        col = col
+                        next_row = face_size - 1
+                        next_col = col
                     elif new_dir == 1:  # up to right
-                        row = col
-                        col = 0
+                        next_row = col
+                        next_col = 0
                     else:
                         print("missing new_dir when dir = up")
                 elif direction == 1:
                     if new_dir == 1:  # right to right
-                        row = row
-                        col = 0
+                        next_row = row
+                        next_col = 0
                     elif new_dir == 3:  # right to left
-                        row = face_size - 1 - row
-                        col = face_size - 1
+                        next_row = face_size - 1 - row
+                        next_col = face_size - 1
                     elif new_dir == 0:  # right to up
-                        col = row
-                        row = face_size - 1
+                        next_col = row
+                        next_row = face_size - 1
                     else:
                         print("missing new_dir when dir = right")
                 elif direction == 3:
                     if new_dir == 3:  # left to left
-                        row = row
-                        col = face_size - 1
+                        next_row = row
+                        next_col = face_size - 1
                     elif new_dir == 1:  # left to right
-                        row = face_size - 1 - row
-                        col = 0
+                        next_row = face_size - 1 - row
+                        next_col = 0
                     elif new_dir == 2:  # left to down
-                        col = row
-                        row = 0
+                        next_col = row
+                        next_row = 0
                     else:
                         print("missing new_dir when dir = left")
-                direction = new_dir
-                face_num = new_face
-            elif m[next_row][next_col] == "#":  # hit a wall
-                break
+
+                check_row, check_col = faceToMap(new_face, next_row, next_col)
+                if map[check_row][check_col] == "#":
+                    break
+                else:
+                    row = next_row
+                    col = next_col
+                    direction = new_dir
+                    face_num = new_face
+
             else:
-                row = next_row
-                col = next_col
+                map_next_row, map_next_col = faceToMap(face_num, next_row, next_col)
+                if m[map_next_row][map_next_col] == "#":
+                    break
+                else:
+                    row = next_row
+                    col = next_col
 
         # if we are at the end of the path, stop
         if p_index == len(p):
