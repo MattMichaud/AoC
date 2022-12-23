@@ -78,15 +78,13 @@ def part1(el, part1_rounds):
         round = round + 1
         if round % 10 == 0:
             print("Round", round)
-        proposed_locs = []
+        proposed_moves_locs = []
+        proposed_moves_elf_nums = []
         for e, l in el.items():
             # check neighbors to see if move needed
             empty_neighbors = get_empty_neighbors(el, l)
             all_clear = all(empty_neighbors)
-            if all_clear:
-                # all clear so elf stays put
-                proposed_locs.append(l)
-            else:
+            if not all_clear:
                 # set proposed move based on move order
                 found_move = False
                 for dir_offset in range(4):
@@ -97,16 +95,19 @@ def part1(el, part1_rounds):
                         found_move = True
                         break
                 # no clear move, stay put
-                proposed_locs.append(new_loc if found_move else l)
+                if found_move:
+                    proposed_moves_locs.append(new_loc)
+                    proposed_moves_elf_nums.append(e)
 
-        # determine valid moves
-        # accomplish valid moves
-        for e, l in el.items():
-            proposed = proposed_locs[e - 1]
-            if proposed_locs.count(proposed) < 2:
-                el[e] = proposed
-                if proposed != l:
-                    elves_moved += 1
+        valid_locs = [
+            (x, y)
+            for (x, y) in proposed_moves_locs
+            if proposed_moves_locs.count((x, y)) < 2
+        ]
+        for index, elf_num in enumerate(proposed_moves_elf_nums):
+            if proposed_moves_locs[index] in valid_locs:
+                el[elf_num] = proposed_moves_locs[index]
+                elves_moved += 1
 
         # update move order
         check_index = (check_index + 1) % 4
@@ -119,7 +120,7 @@ def part1(el, part1_rounds):
 
 test_inp = "test.txt"
 puzzle_inp = "2022/inputs/23.txt"
-curr_inp = puzzle_inp
+curr_inp = test_inp
 
 NEIGHBOR_LOCS = {
     "N": [(-1, -1), (0, -1), (1, -1)],
