@@ -41,57 +41,65 @@ def count_empty_ground(el):
     return empty_ground
 
 
-def clear_in_direction(els, loc, dir):
-    offsets = NEIGHBOR_LOCS[dir]
+def get_empty_neighbors(els, loc):
+    # offsets (0=NW, 1=N, 2=NE, 3=W, 5=Self, 6=E, 7=SW, 8=S, 9=SE)
+    offsets = [
+        (-1, -1),  # 0 = NW
+        (0, -1),  # 1 = N
+        (1, -1),  # 2 = NE
+        (-1, 0),  # 3 = W
+        (1, 0),  # 4 = E
+        (-1, 1),  # 5 = SW
+        (0, 1),  # 6 = S
+        (1, 1),  # 7 = SE
+    ]
     x, y = loc
-    res = all((x + dx, y + dy) not in els.values() for dx, dy in offsets)
-    return res
+    empty_neighbors = [(x + dx, y + dy) not in els.values() for dx, dy in offsets]
+    return empty_neighbors
 
 
-def part1(el, part1_rounds):
-    # print("== INITIAL STATE ==")
-    # display_elves(elf_locs, (-3, -2), (10, 9))
+def solve(el, part1_rounds):
     check_order = ["N", "S", "W", "E"]
     check_index = 0
     elves_moved = 1
     round = 0
+    dir_indices = {"N": [0, 1, 2], "S": [5, 6, 7], "W": [0, 3, 5], "E": [2, 4, 7]}
     while elves_moved > 0:
         elves_moved = 0
         round = round + 1
-        # if round % 100 == 0:
-        #     print("Round", round)
-        proposed_locs = []
+        proposed_moves_locs = []
+        proposed_moves_elf_nums = []
         for e, l in el.items():
             # check neighbors to see if move needed
-            all_clear = all(clear_in_direction(el, l, d) for d in check_order)
-            if all_clear:
-                # all clear so elf stays put
-                proposed_locs.append(l)
-            else:
+            empty_neighbors = get_empty_neighbors(el, l)
+            all_clear = all(empty_neighbors)
+            if not all_clear:
                 # set proposed move based on move order
                 found_move = False
                 for dir_offset in range(4):
                     check_dir = check_order[(check_index + dir_offset) % 4]
-                    if clear_in_direction(el, l, check_dir):
+                    dir_neighbors = [empty_neighbors[n] for n in dir_indices[check_dir]]
+                    if all(dir_neighbors):
                         new_loc = tuple_add(l, MOVE_OFFSETS[check_dir])
                         found_move = True
                         break
                 # no clear move, stay put
-                proposed_locs.append(new_loc if found_move else l)
+                if found_move:
+                    proposed_moves_locs.append(new_loc)
+                    proposed_moves_elf_nums.append(e)
 
-        # determine valid moves
-        # accomplish valid moves
-        for e, l in el.items():
-            proposed = proposed_locs[e - 1]
-            if proposed_locs.count(proposed) < 2:
-                el[e] = proposed
-                if proposed != l:
-                    elves_moved += 1
+        valid_locs = [
+            (x, y)
+            for (x, y) in proposed_moves_locs
+            if proposed_moves_locs.count((x, y)) < 2
+        ]
+        for index, elf_num in enumerate(proposed_moves_elf_nums):
+            if proposed_moves_locs[index] in valid_locs:
+                el[elf_num] = proposed_moves_locs[index]
+                elves_moved += 1
 
         # update move order
         check_index = (check_index + 1) % 4
-        # print("\n== End of Round", round + 1, "==")
-        # display_elves(elf_locs, (-3, -2), (10, 9))
         if round == part1_rounds:
             print("Part 1:", count_empty_ground(el))
     print("Part 2:", round)
@@ -101,13 +109,6 @@ test_inp = "test.txt"
 puzzle_inp = "2022/inputs/23.txt"
 curr_inp = puzzle_inp
 
-NEIGHBOR_LOCS = {
-    "N": [(-1, -1), (0, -1), (1, -1)],
-    "S": [(-1, 1), (0, 1), (1, 1)],
-    "W": [(-1, -1), (-1, 0), (-1, 1)],
-    "E": [(1, -1), (1, 0), (1, 1)],
-}
-
 MOVE_OFFSETS = {
     "N": (0, -1),
     "S": (0, 1),
@@ -116,5 +117,4 @@ MOVE_OFFSETS = {
 }
 
 elf_locs = parse_input(curr_inp)
-# display_elves(elf_locs, (0, 0), (4, 6))
-part1(elf_locs, 10)
+solve(elf_locs, 10)
