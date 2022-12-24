@@ -55,6 +55,7 @@ part1_finished = False
 while states:
     (row, col, time, seen_end, seen_start) = states.popleft()
     # if it isn't a valid spot, ignore it
+    # need this because we don't check when adding states
     if not (0 <= row < max_rows and 0 <= col < max_cols and grid[row][col] != "#"):
         continue
     # once we are at the end,
