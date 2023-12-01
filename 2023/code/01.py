@@ -3,78 +3,52 @@ import sys
 sys.path.append(".")
 from utils import data_import
 
-# A = ROCK, B = PAPER, C = SCISSORS
-# X = ROCK, Y = PAPER, Z = SCISSORS
+
+def calibration_value(inp):
+    sum = 0
+    for l in inp:
+        digits = ""
+        for c in l[0]:
+            if c.isdigit():
+                digits += c
+        two_digit = digits[0] + digits[len(digits) - 1]
+        sum += int(two_digit)
+    return sum
 
 
-def outcome_score(opp, you):
-    if (
-        (opp == "A" and you == "X")
-        or (opp == "B" and you == "Y")
-        or (opp == "C" and you == "Z")
-    ):
-        return 3
-    elif (
-        (opp == "A" and you == "Y")
-        or (opp == "B" and you == "Z")
-        or (opp == "C" and you == "X")
-    ):
-        return 6
-    else:
-        return 0
+def part1(inp):
+    print("Part 1 Answer:", calibration_value(inp))
 
 
-def shape_score(shape):
-    if shape == "A" or shape == "X":
-        return 1
-    elif shape == "B" or shape == "Y":
-        return 2
-    else:
-        return 3
+def part2(inp):
+    num_strings = [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+    ]
+    cleaned_input = []
+    for l in inp:
+        string = l[0]
+        print(string)
+        for number, num_txt in enumerate(num_strings):
+            string = string.replace(num_txt, str(number + 1))
+        print(string)
+        cleaned_input.append([string])
 
+    sum = calibration_value(cleaned_input)
 
-def part1(turn_list):
-    score = 0
-    for a, b in turn_list:
-        round_score = outcome_score(a, b) + shape_score(b)
-        score += round_score
-    print("Part 1 Answer", score)
-
-
-def part2(turn_list):
-    score = 0
-    for them, desired_outcome in turn_list:
-        if desired_outcome == "X":
-            # need to lose
-            if them == "A":
-                you = "Z"
-            elif them == "B":
-                you = "X"
-            elif them == "C":
-                you = "Y"
-        if desired_outcome == "Y":
-            # need to draw
-            if them == "A":
-                you = "X"
-            elif them == "B":
-                you = "Y"
-            elif them == "C":
-                you = "Z"
-        if desired_outcome == "Z":
-            # need to win
-            if them == "A":
-                you = "Y"
-            elif them == "B":
-                you = "Z"
-            elif them == "C":
-                you = "X"
-        turn_score = outcome_score(them, you) + shape_score(you)
-        score += turn_score
-    print("Part 2 Answer", score)
+    print("Part 2 Answer: ", sum)
 
 
 test_file = "2023/inputs/test.txt"
 puzzle_file = "2023/inputs/01.txt"
-turns = data_import(puzzle_file, str, " ")
-part1(turns)
-part2(turns)
+lines = data_import(test_file, str, " ")
+# part1(lines)
+part2(lines)
