@@ -2,7 +2,6 @@ def scratch_cards(filename):
     with open(filename, "r") as f:
         data = f.read().splitlines()
 
-    p1 = 0
     Cards = {}
     for line in data:
         card_num = int(line.split()[1][:-1])
