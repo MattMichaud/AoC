@@ -1,55 +1,72 @@
-import sys
-
-sys.path.append(".")
-from utils import data_import
-
-
 def parse_input(filename):
-    data = open(filename, "r").read().strip()
-    data = data.split("\n\n")
-    seeds_line = data[0]
-    map_lines = [l.split("\n") for l in data[1:]]
-
-    seeds = seeds_line.replace("seeds: ", "").split()
-
-    maps = {}
-    for ml in map_lines:
-        source = ml[0][: ml[0].find("-to-")]
-        destination = ml[0].replace(source + "-to-", "").replace(" map:", "")
-        map_dict = {}
-        map_dict["dest"] = destination
-        rules = []
-        for r in ml[1:]:
-            d_start, s_start, length = r.split()
-            rules.append((int(d_start), int(s_start), int(length)))
-        map_dict["rules"] = rules
-
-        maps[source] = map_dict
-
-    return (seeds, maps)
+    seeds, *maps = open(filename, "r").read().strip().split("\n\n")
+    seeds = [int(x) for x in seeds.split()[1:]]
+    rule_sets = []
+    for map in maps:
+        lines = map.split("\n")[1:]
+        rules = [[int(x) for x in line.split()] for line in lines]
+        rule_sets.append(rules)
+    return seeds, rule_sets
 
 
-def part1(seeds, maps):
-    locations = []
-    for s in seeds:
-        source = "seed"
-        value = int(s)
-        while source != "location":
-            new_value = None
-            destination = maps[source]["dest"]
-            for d_start, s_start, length in maps[source]["rules"]:
-                if (s_start <= value) and (value < (s_start + length)):
-                    new_value = value - (s_start - d_start)
-            if not new_value:
-                new_value = value
-            source = destination
-            value = new_value
-        locations.append(value)
-    return min(locations)
+def apply_rule(inp, rules):
+    for dest, source, size in rules:
+        if source <= inp < source + size:
+            return inp + (dest - source)
+    return inp
+
+
+def apply_all_rules(inp, rule_sets):
+    for rules in rule_sets:
+        inp = apply_rule(inp, rules)
+    return inp
+
+
+def apply_rule_to_ranges(ranges, rules):
+    added_ranges = []
+    for dest, source, size in rules:
+        source_end = source + size
+        new_ranges = []
+        while ranges:
+            (start, end) = ranges.pop()
+            left = (start, min(end, source))
+            middle = (max(start, source), min(source_end, end))
+            right = (max(source_end, start), end)
+            if left[1] > left[0]:
+                new_ranges.append(left)
+            if middle[1] > middle[0]:
+                added_ranges.append(
+                    (middle[0] - source + dest, middle[1] - source + dest)
+                )
+            if right[1] > right[0]:
+                new_ranges.append(right)
+        ranges = new_ranges
+    return ranges + added_ranges
+
+
+def apply_all_rules_to_ranges(ranges, rule_sets):
+    for rules in rule_sets:
+        ranges = apply_rule_to_ranges(ranges, rules)
+    return ranges
+
+
+def part1(seeds, rule_sets):
+    return min([apply_all_rules(s, rule_sets) for s in seeds])
+
+
+def part2(seeds, rule_sets):
+    seed_ranges = [(seeds[i], seeds[i] + seeds[i + 1]) for i in range(0, len(seeds), 2)]
+    return min(
+        [
+            min(apply_all_rules_to_ranges([(start, end)], rule_sets))[0]
+            for start, end in seed_ranges
+        ]
+    )
 
 
 test_file = "2023/inputs/test.txt"
 puzzle_file = "2023/inputs/05.txt"
 current_file = puzzle_file
-s, m = parse_input(current_file)
-print("Part 1 Answer:", part1(s, m))
+s, r = parse_input(current_file)
+print("Part 1:", part1(s, r))
+print("Part 2:", part2(s, r))
