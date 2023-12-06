@@ -12,10 +12,16 @@ def list_to_int(li):
     return int("".join([str(l) for l in li]))
 
 
+def quadratic_roots(a, b, c):
+    return [
+        (-b + sqrt(b**2 - (4 * a * c))) / (2 * a),
+        (-b - sqrt(b**2 - (4 * a * c))) / (2 * a),
+    ]
+
+
 def count_winning_times(t, d):
-    root1 = ceil(((0 - t) + sqrt((t**2) - (4 * d))) / (-2) + 0.00000000000001)
-    root2 = floor(((0 - t) - sqrt((t**2) - (4 * d))) / (-2) - 0.00000000000001)
-    return root2 - root1 + 1
+    roots = sorted(quadratic_roots(-1, t, -(d + 0.000000000001)))
+    return floor(roots[1]) - ceil(roots[0]) + 1
 
 
 def part1(times, distances):
