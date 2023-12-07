@@ -24,9 +24,7 @@ def hand_rank(hand, joker=False):
     for card in hand:
         cards[card] += 1
     counts = sorted(cards.values(), reverse=True)
-    if jokers == 5:
-        return 6  # five of a kind
-    elif counts[0] + jokers == 5:
+    if jokers == 5 or (counts[0] + jokers == 5):
         return 6  # five of a kind
     elif counts[0] + jokers == 4:
         return 5  # four of a kind
