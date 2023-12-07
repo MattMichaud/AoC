@@ -52,12 +52,12 @@ def hand_sort_value(hand, joker=False):
             sv.append("0" + card)
         else:
             sv.append(vals[card])
-    return "".join(sv)
+    return int("".join(sv))
 
 
 def sorted_ranked_hands(hands, joker=False):
     ranked_hands = [
-        (h, b, float(str(hand_rank(h, joker)) + "." + hand_sort_value(h, joker)))
+        (h, b, hand_rank(h, joker) + (hand_sort_value(h, joker) / 10000000000.0))
         for h, b in hands
     ]
     ranked_hands.sort(key=lambda x: x[2])
