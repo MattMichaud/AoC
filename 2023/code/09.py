@@ -1,9 +1,3 @@
-import sys
-
-sys.path.append(".")
-from utils import lcm
-
-
 def parse_input(filename):
     data = open(filename, "r").read().strip().split("\n")
     lines = [[int(x) for x in line.split()] for line in data]
@@ -22,6 +16,6 @@ def predict_prev(li):
 
 test_file = "2023/inputs/test.txt"
 puzzle_file = "2023/inputs/09.txt"
-lines = parse_input(puzzle_file)
-print("Part 1:", sum(predict_next(l) for l in lines))
-print("Part 2:", sum(predict_prev(l) for l in lines))
+readings = parse_input(puzzle_file)
+print("Part 1:", sum(predict_next(l) for l in readings))
+print("Part 2:", sum(predict_prev(l) for l in readings))
