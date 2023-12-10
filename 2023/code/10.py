@@ -29,6 +29,14 @@ three_bys = {
     "F": ["...", ".##", ".#."],
     ".": ["...", "...", "..."],
 }
+connections = {
+    "|": {"n", "s"},
+    "-": {"e", "w"},
+    "L": {"n", "e"},
+    "J": {"n", "w"},
+    "7": {"w", "s"},
+    "F": {"e", "s"},
+}
 
 
 def parse_input(filename):
@@ -105,7 +113,7 @@ def part2(loop, debug=False):
                     assert set_loc not in new_grid.keys()
                     new_grid[set_loc] = char
 
-    # fix the start point
+    # correctly fill the start mini-grid
     start_translated = (start[0] * 3, start[1] * 3)
     if new_grid[tuple_add(start_translated, (-2, 0))] == "#":
         new_grid[tuple_add(start_translated, (-1, 0))] = "#"
@@ -170,9 +178,46 @@ def part2(loop, debug=False):
     return empties
 
 
+def add_start_pipe(pipes, start):
+    valids = set()
+    for d in dirs.keys():
+        check_loc = tuple_add(start, dirs[d]["move_offset"])
+        if check_loc in loop and pipes[check_loc] in dirs[d]["valid_next"]:
+            valids.add(d)
+    for k, v in connections.items():
+        if valids == v:
+            pipes[start] = k
+    return
+
+
+def part2_preston(loop, pipes):
+    max_row = max(x for x, _ in pipes.keys())
+    max_col = max(y for _, y in pipes.keys())
+    min_row = min(x for x, _ in pipes.keys())
+    min_col = min(y for _, y in pipes.keys())
+    inside_count = 0
+    for r in range(min_row, max_row + 1):
+        inside = False
+        for c in range(min_col, max_col + 1):
+            curr_item = "." if (r, c) not in loop else pipes[(r, c)]
+            if curr_item == "." and inside:
+                inside_count += 1
+            elif curr_item in ["F", "L"]:
+                open_corner = curr_item
+            elif (
+                curr_item == "|"
+                or (curr_item == "7" and open_corner == "L")
+                or (curr_item == "J" and open_corner == "F")
+            ):
+                inside = not inside
+    return inside_count
+
+
 test = "2023/inputs/test.txt"
 puzzle = "2023/inputs/10.txt"
 pipes, start = parse_input(puzzle)
 loop = find_loop(pipes, start)
 print("Part 1:", len(loop) // 2)
-print("Part 2:", part2(loop, False))
+print("Part 2 (Matt Method):", part2(loop, False))
+add_start_pipe(pipes, start)
+print("Part 2 (Preston Method):", part2_preston(loop, pipes))
