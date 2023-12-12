@@ -30,7 +30,7 @@ def count_possibles(pattern, groups):
         count += count_possibles(pattern[1:], groups)
 
     # treat first character as '#' (start the group)
-    # check if enough space to finish group (length and no '.')
+    # check if enough space to finish group (length and no '.' in the way)
     # if not finishing the pattern, make sure the next char after group isn't '#'
     if (
         (pattern[0] == "#" or pattern[0] == "?")
