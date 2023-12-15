@@ -32,7 +32,7 @@ def hashmap(input):
             next
         elif "=" in step:
             # add to box or update focal length
-            lbl = step[:-2]
+            lbl = step[: step.find("=")]
             box = hash(lbl)
             focal_length = int(step[step.find("=") + 1 :])
             current_contents = boxes[box]
