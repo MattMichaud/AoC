@@ -32,9 +32,9 @@ def hashmap(input):
             next
         elif "=" in step:
             # add to box or update focal length
-            lbl = step[: step.find("=")]
+            lbl, focal_length = step.split("=")
+            focal_length = int(focal_length)
             box = hash(lbl)
-            focal_length = int(step[step.find("=") + 1 :])
             current_contents = boxes[box]
             current_labels = [l for l, fl in current_contents]
             if lbl not in current_labels:
