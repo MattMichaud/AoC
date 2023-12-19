@@ -36,3 +36,21 @@ def lcm(li):
     for i in li[1:]:
         lcm = lcm * i // gcd(lcm, i)
     return lcm
+
+
+def shoelace_area(coords):
+    # uses shoelace formula and pick's theorem
+    # to calculate points in the area and perimeter
+    area = 0
+    perim = 0
+    # shoelace formula (trapezoid version)
+    for i in range(1, len(coords)):
+        x1, y1 = coords[i - 1]
+        x2, y2 = coords[i]
+        area += (y1 + y2) * (x1 - x2)
+        perim += abs(x1 - x2) + abs(y1 - y2)
+    area = abs(area) // 2
+    # pick's theorem
+    interior = area - (perim) // 2 + 1
+    # total points indside and on perimeter
+    return interior + perim
