@@ -81,6 +81,6 @@ test = "2023/inputs/test.txt"
 puzzle = "2023/inputs/22.txt"
 filename = puzzle
 
-blocks, _ = drop_all_blocks(parse_input(filename))
+blocks = drop_all_blocks(parse_input(filename))[0]
 print("Part 1:", count_safely_movable(blocks))
 print("Part 2:", biggest_chain_reaction(blocks))
