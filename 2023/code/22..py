@@ -19,10 +19,10 @@ def parse_input(filename):
 def drop_blocks(blocks):
     keep_dropping = True
     unique_dropped = set()  # for part 2
-    while keep_dropping:
-        blocks_dropped = 0
-
-        # initialize occupied set
+    any_dropped = True
+    while any_dropped:
+        # initialize state
+        any_dropped = False
         occupied = set()
         for block in blocks:
             for x, y, z in block:
@@ -30,12 +30,12 @@ def drop_blocks(blocks):
 
         # try to move each block in the list
         for i, block in enumerate(blocks):
-            # make sure all blocks are either not at the bottom and won't hit another block
+            # make sure all points are either not at the bottom and won't hit another block
             if all(
                 z != 1 and ((x, y, z - 1) not in occupied or (x, y, z - 1) in block)
                 for x, y, z in block
             ):
-                blocks_dropped += 1
+                any_dropped = True  # need to keep trying to drop
                 unique_dropped.add(i)  # for part 2
                 # move each point down one
                 for x, y, z in block:
@@ -44,9 +44,6 @@ def drop_blocks(blocks):
                 # update the list of where the blocks are
                 blocks[i] = [(x, y, z - 1) for x, y, z in block]
 
-        # if nothing fell, stop dropping and return
-        if blocks_dropped == 0:
-            keep_dropping = False
     return unique_dropped
 
 
