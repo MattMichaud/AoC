@@ -10,10 +10,12 @@ def parse_input(filename):
         start, end = line.split("~")
         start_x, start_y, start_z = (int(c) for c in start.split(","))
         end_x, end_y, end_z = (int(c) for c in end.split(","))
-        for x in range(start_x, end_x + 1):
-            for y in range(start_y, end_y + 1):
-                for z in range(start_z, end_z + 1):
-                    block.append((x, y, z))
+        block = [
+            (x, y, z)
+            for z in range(start_z, end_z + 1)
+            for y in range(start_y, end_y + 1)
+            for x in range(start_x, end_x + 1)
+        ]
         blocks.append(block)
     return blocks
 
@@ -23,23 +25,22 @@ def drop_all_blocks(blocks):
     unique_dropped = set()  # for part 2
     while keep_dropping:
         blocks_dropped = 0
-        occupied = set()
 
         # initialize occupied set
+        occupied = set()
         for block in blocks:
-            [occupied.add((x, y, z)) for x, y, z in block]
+            for x, y, z in block:
+                occupied.add((x, y, z))
 
         # try to move each block in the list
         for i, block in enumerate(blocks):
             can_move = True
             for x, y, z in block:
-                if z == 1:  # already at the bottom
+                if z == 1:
+                    # already at the bottom - don't drop
                     can_move = False
-                if (x, y, z - 1) in occupied and (
-                    x,
-                    y,
-                    z - 1,
-                ) not in block:  # would hit another block
+                if (x, y, z - 1) in occupied and (x, y, z - 1) not in block:
+                    # would hit another block - don't drop
                     can_move = False
             if can_move:
                 blocks_dropped += 1
@@ -51,7 +52,7 @@ def drop_all_blocks(blocks):
                 # update the list of where the blocks are
                 blocks[i] = [(x, y, z - 1) for x, y, z in block]
 
-        # check if anything fell
+        # if nothing fell, stop dropping and return
         if blocks_dropped == 0:
             keep_dropping = False
     return blocks, unique_dropped
@@ -66,8 +67,10 @@ def count_safely_movable(blocks):
             for j, jblock in enumerate(blocks):
                 if i != j and (x, y, z - 1) in jblock:
                     blocks_below.add(j)
+        # if only one block below, that block is critical
         if len(blocks_below) == 1:
             critical_blocks.add(blocks_below.pop())
+    # total - critical = safe to move
     return len(blocks) - len(critical_blocks)
 
 
