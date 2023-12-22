@@ -16,7 +16,7 @@ def parse_input(filename):
     return blocks
 
 
-def drop_all_blocks(blocks):
+def drop_blocks(blocks):
     keep_dropping = True
     unique_dropped = set()  # for part 2
     while keep_dropping:
@@ -47,36 +47,23 @@ def drop_all_blocks(blocks):
         # if nothing fell, stop dropping and return
         if blocks_dropped == 0:
             keep_dropping = False
-    return blocks, unique_dropped
+    return unique_dropped
 
 
-def count_safely_movable(blocks):
-    critical_blocks = set()
-    # figure out which blocks are below each block
-    for i, block in enumerate(blocks):
-        blocks_below = set()
-        for x, y, z in block:
-            for j, jblock in enumerate(blocks):
-                if i != j and (x, y, z - 1) in jblock:
-                    blocks_below.add(j)
-        # if only one block below, that block is critical
-        if len(blocks_below) == 1:
-            critical_blocks.add(blocks_below.pop())
-    # total - critical = safe to move
-    return len(blocks) - len(critical_blocks)
-
-
-def biggest_chain_reaction(blocks):
-    return sum(
-        len(drop_all_blocks(blocks[0:i] + blocks[i + 1 :])[1])
-        for i in range(len(blocks))
-    )
+def solve(blocks):
+    drop_blocks(blocks)
+    safe_to_move = chain_reactions = 0
+    for i in range(len(blocks)):
+        moved = len(drop_blocks(blocks[0:i] + blocks[i + 1 :]))
+        if moved == 0:
+            safe_to_move += 1
+        chain_reactions += moved
+    print("Part 1:", safe_to_move)
+    print("Part 2:", chain_reactions)
 
 
 test = "2023/inputs/test.txt"
 puzzle = "2023/inputs/22.txt"
 filename = puzzle
 
-blocks = drop_all_blocks(parse_input(filename))[0]
-print("Part 1:", count_safely_movable(blocks))
-print("Part 2:", biggest_chain_reaction(blocks))
+solve((parse_input(filename)))
