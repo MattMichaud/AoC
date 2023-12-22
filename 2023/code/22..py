@@ -1,7 +1,3 @@
-from collections import defaultdict
-from copy import deepcopy
-
-
 def parse_input(filename):
     data = open(filename, "r").read().splitlines()
     blocks = []
