@@ -43,17 +43,17 @@ def drop_blocks(blocks):
                 # update the list of where the blocks are
                 blocks[i] = [(x, y, z - 1) for x, y, z in block]
 
-    return unique_dropped
+    return len(unique_dropped)
 
 
 def solve(blocks):
     drop_blocks(blocks)
     safe_to_move = chain_reactions = 0
     for i in range(len(blocks)):
-        moved = len(drop_blocks(blocks[0:i] + blocks[i + 1 :]))
-        if moved == 0:
+        moved_count = drop_blocks(blocks[0:i] + blocks[i + 1 :])
+        if moved_count == 0:
             safe_to_move += 1
-        chain_reactions += moved
+        chain_reactions += moved_count
     print("Part 1:", safe_to_move)
     print("Part 2:", chain_reactions)
 
