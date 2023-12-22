@@ -71,16 +71,10 @@ def count_safely_movable(blocks):
 
 
 def biggest_chain_reaction(blocks):
-    total = 0
-    for i in range(len(blocks)):
-        # remove the block
-        temp_blocks = deepcopy(blocks)
-        temp_blocks = temp_blocks[0:i] + temp_blocks[i + 1 :]
-        # drop blocks
-        _, uniques = drop_all_blocks(temp_blocks)
-        # count uniques that fell
-        total += len(uniques)
-    return total
+    return sum(
+        len(drop_all_blocks(blocks[0:i] + blocks[i + 1 :])[1])
+        for i in range(len(blocks))
+    )
 
 
 test = "2023/inputs/test.txt"
