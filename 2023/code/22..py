@@ -34,15 +34,11 @@ def drop_all_blocks(blocks):
 
         # try to move each block in the list
         for i, block in enumerate(blocks):
-            can_move = True
-            for x, y, z in block:
-                if z == 1:
-                    # already at the bottom - don't drop
-                    can_move = False
-                if (x, y, z - 1) in occupied and (x, y, z - 1) not in block:
-                    # would hit another block - don't drop
-                    can_move = False
-            if can_move:
+            # make sure all blocks are either not at the bottom and won't hit another block
+            if all(
+                z != 1 and ((x, y, z - 1) not in occupied or (x, y, z - 1) in block)
+                for x, y, z in block
+            ):
                 blocks_dropped += 1
                 unique_dropped.add(i)  # for part 2
                 # move each point down one
