@@ -17,7 +17,6 @@ def parse_input(filename):
 
 
 def drop_blocks(blocks):
-    keep_dropping = True
     unique_dropped = set()  # for part 2
     any_dropped = True
     while any_dropped:
