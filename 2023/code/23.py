@@ -66,6 +66,8 @@ def build_graphs(map, start, end):
         else:
             # headed "backwards" so add it reversed
             di_graph.add_edge(current, begin, cost=length)
+
+        # part 2 where direction doesn't matter
         graph.add_edge(begin, current, cost=length)  # for part 2
 
         # add options into the queue
