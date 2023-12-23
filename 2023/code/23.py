@@ -6,12 +6,11 @@ sys.path.append(".")
 from utils import tuple_add as addt
 
 directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-hills = [".><", ".<>", ".v^", ".^v"]
+hills = [".><", ".<>", ".v^", ".^v"]  # used for bitwise or to determine "forward"
 
 
 def parse_input(filename):
     lines = open(filename, "r").read().strip().split("\n")
-    # lines = data.split("\n")
     map = {}
     for r, row in enumerate(lines):
         for c, col in enumerate(row):
