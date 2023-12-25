@@ -14,11 +14,11 @@ def parse_input(filename):
     return inp_graph
 
 
-def find_cut_value(graph, value):
+def split_graph_in_n_cuts(graph, num_cuts):
     temp_graph = graph.copy()
     for node_a, node_b in combinations(temp_graph.nodes(), 2):
         edge_cuts = nx.minimum_edge_cut(temp_graph, node_a, node_b)
-        if len(edge_cuts) == value:
+        if len(edge_cuts) == num_cuts:
             for edge in edge_cuts:
                 temp_graph.remove_edge(*edge)
             size_of_a = len(nx.descendants(temp_graph, node_a)) + 1
@@ -30,5 +30,5 @@ test = "2023/inputs/test.txt"
 puzzle = "2023/inputs/25.txt"
 filename = puzzle
 
-print("Part 1:", find_cut_value(parse_input(filename), 3))
+print("Part 1:", split_graph_in_n_cuts(parse_input(filename), 3))
 print("Part 2: Merry Christmas")
